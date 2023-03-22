@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.rockyxiang</groupId>
-    <artifactId>singleMes</artifactId>
+    <artifactId>miaMesQ</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>singleMes</name>
-    <description>singleMes</description>
+    <name>miaMesQ</name>
+    <description>miaMesQ</description>
 
     <properties>
         <java.version>1.8</java.version>

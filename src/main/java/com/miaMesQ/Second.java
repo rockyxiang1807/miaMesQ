@@ -12,10 +12,7 @@ import org.springframework.stereotype.Component;
 public class Second {
 
     private Class<?> clazz;
-    /*
-     * 记录数据，可以指定一个标识存入map
-     * 用来判断幂等性
-     */
+
     private final String L = "lock";
     private int retry;
 
