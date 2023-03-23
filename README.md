@@ -28,13 +28,13 @@ git clone https://github.com/rockyxiang1807/miaMesQ
 ### 在启动类中添加
 ```java
     @Resource
-    private Second second;
+    private MesQConsumer mesQConsumer;
 
     @Bean
-    public First createFirst(){
-        second.setClazz(MesQService.class); // 自己编写的实现类
-        second.setRetry(3); // retry 最大次数
-        return new First(second);
+    public MesQEntrance createFirst(){
+        mesQConsumer.setClazz(MesQService.class); // 自己编写的实现类
+        mesQConsumer.setRetry(3); // retry 最大次数
+        return new MesQEntrance(mesQConsumer);
     }
 ```
 ### 启动类
@@ -45,17 +45,17 @@ git clone https://github.com/rockyxiang1807/miaMesQ
 public class UseMiaMesQApplication {
 
     @Resource
-    private Second second;
+    private MesQConsumer mesQConsumer;
 
     public static void main(String[] args) {
         SpringApplication.run(UseMiaMesQApplication.class, args);
     }
 
     @Bean
-    public First createFirst(){
-        second.setClazz(MesQService.class); // 自己编写的实现类
-        second.setRetry(3); // retry 最大次数
-        return new First(second);
+    public MesQEntrance createFirst(){
+        mesQConsumer.setClazz(MesQService.class); // 自己编写的实现类
+        mesQConsumer.setRetry(3); // retry 最大次数
+        return new MesQEntrance(mesQConsumer);
     }
 }
 ```
@@ -66,12 +66,12 @@ public class UseMiaMesQApplication {
 public class MesQController {
 
     @Autowired
-    private First first;
-    
+    private MesQEntrance mesQEntrance;
+
     @GetMapping
     public void a(@RequestParam("s") String s)throws Exception{ // 自行定义错误处理
         Mes mes = new Mes(s); // 消息实体类, s 可以是任意类型
-        first.pushMes(mes);   // 发送消息
+        mesQEntrance.pushMes(mes);   // 发送消息
         System.out.println("ok");
     }
 }
@@ -79,16 +79,16 @@ public class MesQController {
 ### 编写Service
 ```java
 public class MesQService {
-    // 正常执行的方法 命名须为 operation
+    // 正常执行的方法 命名须为 normalProcess
     // 传参只有一个，如有多个参数建议将其封装到一个类中
-    public static void operation(Object  s)throws Exception{
+    public static void normalProcess(Object  s)throws Exception{
         Thread.sleep(10000L);
-        System.out.println("operation"+s);
+        System.out.println("normalProcess "+s);
     }
-    // 达到 retry 最大次数后执行的方法 命名须为 faildHandler
-    // 传参同  operation
-    public static void faildHandler(Object s){
-        System.out.println("faild"+s);
+    // 达到 retry 最大次数后执行的方法 命名须为 exceptionalProcess
+    // 传参同  normalProcess
+    public static void exceptionalProcess(Object s){
+        System.out.println("exceptionalProcess "+s);
     }
 }
 ```
