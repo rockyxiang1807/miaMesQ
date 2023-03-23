@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * 2023/03/21 2:35 下午
  */
 @Component
-public class Second {
+public class MesQConsumer {
 
     private Class<?> clazz;
 
@@ -20,14 +20,14 @@ public class Second {
     public void operation() throws Exception {
         synchronized (L) {
             while (true) {
-                if (First.getList().size() > 0) {
+                if (MesQEntrance.getQueue().size() > 0) {
                     /*
                      * 移除链表头部元素并返回
                      */
-                    Mes<?> mes = First.getList().removeFirst();
+                    Mes<?> mes = MesQEntrance.getQueue().removeFirst();
                     try {
 
-                        clazz.getMethod("operation",Object.class).invoke(null,mes.getValue());
+                        clazz.getMethod("normalProcess",Object.class).invoke(null,mes.getValue());
 
                     } catch (Exception e) {
                         /*
@@ -38,10 +38,10 @@ public class Second {
                             /*
                              * retry次数上限，进一步处理
                              */
-                            clazz.getMethod("faildHandler",Object.class).invoke(null,mes.getValue());
+                            clazz.getMethod("exceptionalProcess",Object.class).invoke(null,mes.getValue());
                         } else {
                             mes.setRetryCount(mes.getRetryCount() + 1);
-                            First.getList().addLast(mes);
+                            MesQEntrance.getQueue().addLast(mes);
                         }
                     }
 
@@ -68,13 +68,6 @@ public class Second {
         }
     }
 
-    public Second(Class<?> consumer,int retry) {
-        this.clazz = consumer;
-        this.retry = retry - 1;
-    }
-    public Second() {
-    }
-
     public Class<?> getClazz() {
         return clazz;
     }
@@ -88,6 +81,6 @@ public class Second {
     }
 
     public void setRetry(int retry) {
-        this.retry = retry;
+        this.retry = retry - 1;
     }
 }

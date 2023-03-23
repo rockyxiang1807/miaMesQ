@@ -8,7 +8,7 @@
         <version>2.6.11</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.rockyxiang</groupId>
+    <groupId>com.miaMesQ</groupId>
     <artifactId>miaMesQ</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>miaMesQ</name>
