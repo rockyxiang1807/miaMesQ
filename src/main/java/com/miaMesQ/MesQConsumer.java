@@ -76,10 +76,6 @@ public class MesQConsumer {
         this.clazz = clazz;
     }
 
-    public int getRetry() {
-        return retry;
-    }
-
     public void setRetry(int retry) {
         this.retry = retry - 1;
     }
