@@ -51,7 +51,6 @@ public class UseMiaMesQApplication {
         SpringApplication.run(UseMiaMesQApplication.class, args);
     }
 
-    // 可以定义多个Bean使用
     @Bean
     public MesQEntrance createFirst(){
         mesQConsumer.setClazz(MesQService.class); // 自己编写的实现类
